@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name=”viewport” content="user-scalable=no" />
+    <!--<link rel="stylesheet" href="styles.css">  Подключение внешнего CSS файла -->
+    <title>Document</title>
+    <style>
+
+        @font-face {
+            font-family: 'AmaticSC-Regular'; /* Название для использования шрифта */
+            src: url('fonts/AmaticSC/AmaticSC-Regular.ttf') format('truetype'); /* Путь к файлу шрифта */
+        }
+        body {
+            margin: 0;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #startButton {
+            font-family: 'AmaticSC-Regular';
+            font-size: 30px;
+            width: 130px;
+            height: 40px;
+            color: #fff;
+            border-radius: 5px;
+            padding: 10px 25px;
+            font-weight: 500;
+            background: transparent;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            display: inline-block;
+            box-shadow:inset 2px 2px 2px 0px rgba(255,255,255,.5),
+            7px 7px 20px 0px rgba(0,0,0,.1),
+            4px 4px 5px 0px rgba(0,0,0,.1);
+            outline: none;
+            background-color: #f0ecfc;
+            background-image: linear-gradient(315deg, #f0ecfc 0%, #c797eb 74%);
+            line-height: 42px;
+            padding: 0;
+            border: none;
+        }
+
+        #background {
+            position: fixed;
+            width: 100vw;
+            height: 100vh;
+            background: url('img/table_1.jpg') no-repeat center center fixed;
+            background-size: cover;
+            filter: blur(10px); /* Начальное размытие */
+            z-index: -1;
+        }
+
+        #content {
+
+            width: 80%;
+
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0%;
+            justify-content: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .container {
+            width: 14%;
+            height: 110px;
+            flex-direction: column;
+            align-items: center;
+            background-size: cover;
+            color: white;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+            margin-bottom: 0%;
+            transition: z-index 0.3s;
+        }
+        .button {
+            width: 69px;
+            height: 104px;
+            background: url('img/card_back.jpg') no-repeat;
+            background-size: cover !important;
+            cursor: pointer;
+            transition: z-index 0.3s;
+        }
+
+
+        .container:hover {
+            z-index: 23;
+        }
+
+        .container.active {
+            z-index: 23 !important;
+        }
+
+
+  </style>
+
+</head>
+
+<body>
+
+  <div id="background"></div>
+
+    <div id="content" style="display: none;">
+        <!-- Кнопки будут добавлены с помощью JavaScript -->
+    </div>
+
+    <button id="startButton" >Начать</button>
+
+    <script>
+        function showButtons() {
+
+            const dictionary = {};
+            const numbers = Array.from({ length: 21 }, (_, index) => index + 1);
+
+            for (let i = 1; i <= 21; i++) {
+                const randomIndex = Math.floor(Math.random() * numbers.length);
+                const randomNumber = numbers.splice(randomIndex, 1)[0];
+                dictionary[i] = `${randomNumber}`;
+            }
+
+            const startButton = document.getElementById('startButton');
+            startButton.style.display = 'none';
+
+            const content = document.getElementById('content');
+            content.style.display = 'flex';
+
+            for (let i = 1; i < 22; i++) {
+                const container = document.createElement('div');
+                container.className = 'container';
+                container.style.zIndex = `${21 - i + 1}`;
+                container.style.visibility = 'hidden';
+                const button = document.createElement('button');
+                button.className = 'button';
+                button.id = dictionary[i];
+                button.setAttribute('id_order', i);
+                 //button.innerText = `Button ${i + 1}`;
+                document.getElementById('content').appendChild(button);
+                container.appendChild(button);
+                content.appendChild(container);
+            }
+            const containers = content.querySelectorAll('.container');
+
+            function displayContainer(index) {
+                if (index < containers.length) {
+                containers[index].style.visibility = 'visible';
+                setTimeout(() => {
+                    displayContainer(index + 1);
+                }, 100);
+                }
+            };
+
+            displayContainer(0);
+
+                containers.forEach(container => {
+                    container.addEventListener('mouseenter', () => {
+                        container.classList.add('active');
+                    });
+
+                    container.addEventListener('mouseleave', () => {
+                        container.classList.remove('active');
+                    });
+
+
+                });
+
+                const buttons = content.querySelectorAll('.button');
+                buttons.forEach(button => {
+                    button.addEventListener('click', function() {
+                        const itemId = button.id;
+                        const itemIdOrder = button.getAttribute('id_order');
+                        hideContainers(parseInt(itemId),parseInt(itemIdOrder),0);
+                        showChoise(button);
+                    });
+                });
+
+        };
+
+        function hideContainers(itemId,itemIdOrder,iter) {
+            const containers = content.querySelectorAll('.container');
+
+            if (iter < 6) {
+
+                if (((itemIdOrder+iter) != itemIdOrder) && (22 > (itemIdOrder+iter)) && ((itemIdOrder+iter) > 0)) {containers[itemIdOrder+iter - 1].style.visibility = 'hidden';};
+                if (((itemIdOrder-iter) != itemIdOrder) && (22 > (itemIdOrder-iter)) && ((itemIdOrder-iter) > 0)) {containers[itemIdOrder-iter - 1].style.visibility = 'hidden';};
+
+                if ((22 > (itemIdOrder+7+iter)) && ((itemIdOrder+7+iter) > 0)) {containers[itemIdOrder + 7 + iter - 1].style.visibility = 'hidden';};
+                if ((22 > (itemIdOrder+7-iter)) && ((itemIdOrder+7-iter) > 0)) {containers[itemIdOrder + 7 - iter - 1].style.visibility = 'hidden';};
+
+                if ((22 > (itemIdOrder-7+iter)) && ((itemIdOrder-7+iter) > 0)) {containers[itemIdOrder - 7 + iter - 1].style.visibility = 'hidden';};
+                if ((22 > (itemIdOrder-7-iter)) && ((itemIdOrder-7-iter) > 0)) {containers[itemIdOrder - 7 - iter - 1].style.visibility = 'hidden';};
+
+                if ((22 > (itemIdOrder+14+iter)) && ((itemIdOrder+14+iter) > 0)) {containers[itemIdOrder + 14 + iter - 1].style.visibility = 'hidden';};
+                if ((22 > (itemIdOrder+14-iter)) && ((itemIdOrder+14-iter) > 0)) {containers[itemIdOrder + 14 - iter - 1].style.visibility = 'hidden';};
+
+                if ((22 > (itemIdOrder-14+iter)) && ((itemIdOrder-14+iter) > 0)) {containers[itemIdOrder - 14 + iter - 1].style.visibility = 'hidden';};
+                if ((22 > (itemIdOrder-14-iter)) && ((itemIdOrder-14-iter) > 0)) {containers[itemIdOrder - 14 - iter - 1].style.visibility = 'hidden';};
+
+                setTimeout(() => {
+                    hideContainers(itemId,itemIdOrder,iter + 1);
+                }, 500);
+                }
+            };
+        function showChoise(button) {
+            const container = button.parentNode;
+                        const content = document.getElementById('content');
+                        const buttonRect = button.getBoundingClientRect();
+                        container.style.zIndex = 25;
+                        const itemId = button.id;
+                        //const itemId = button.id;
+                        button.style.background = `url('img/${itemId}.jpg') no-repeat`;
+                        const buttons = document.querySelectorAll('.button');
+                        buttons.forEach(button => {
+                            button.setAttribute("disabled", "false");
+                        });
+
+                        container.classList.add('clicked');
+
+                        //const container = button.closest('.button-container');
+                        const contentRect = content.getBoundingClientRect();
+                        const containerRect = container.getBoundingClientRect();
+
+                        const offsetX = contentRect.left - containerRect.left;
+                        const offsetY = contentRect.top - containerRect.top;
+                        const scale = contentRect.width / buttonRect.width
+
+                        container.style.transformOrigin = `0px 0px`;
+                        container.style.transform = `translate(${offsetX}px, ${offsetY}px) scale(${scale})`;
+                        container.style.transition = 'transform 4s ease-in-out';
+        }
+
+        function unblur() {
+            const content = document.getElementById('background');
+
+            content.style.filter = 'blur(0px)';
+
+        }
+        document.getElementById('startButton').addEventListener('click', function () {
+            unblur();
+
+            setTimeout(function () {
+                showButtons();
+            }, 500);
+
+            });
+
+    </script>
+
+</body>
+</html>
