@@ -178,9 +178,16 @@
                     button.addEventListener('click', function() {
                         const itemId = button.id;
                         const itemIdOrder = button.getAttribute('id_order');
-                        hideContainers(parseInt(itemId),parseInt(itemIdOrder),0);
-                        showChoise(button);
-                        tg_send(itemId)
+
+                        setTimeout(() => {
+                            hideContainers(parseInt(itemId),parseInt(itemIdOrder),0);
+                        }, 1000);
+                        setTimeout(() => {
+                            showChoise(button);
+                        }, 5000);
+                        setTimeout(() => {
+                            tg_send(itemId)
+                        }, 15000);
                     });
                 });
 
