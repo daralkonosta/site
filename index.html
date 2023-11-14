@@ -181,12 +181,17 @@
                         const itemId = button.id;
                         const itemIdOrder = button.getAttribute('id_order');
 
+
+
+                        setTimeout(() => {
+                            swapCard(button);
+                        }, 0);
                         setTimeout(() => {
                             hideContainers(parseInt(itemId),parseInt(itemIdOrder),0);
                         }, 1000);
                         setTimeout(() => {
                             showChoise(button);
-                        }, 1000);
+                        }, 2000);
                         setTimeout(() => {
                             tg_send(itemId)
                         }, 15000);
@@ -198,36 +203,45 @@
         function hideContainers(itemId,itemIdOrder,iter) {
             const containers = content.querySelectorAll('.container');
 
-            if (iter < 6) {
+            if (iter < 7) {
 
-                if (((itemIdOrder+iter) != itemIdOrder) && (22 > (itemIdOrder+iter)) && ((itemIdOrder+iter) > 0)) {containers[itemIdOrder+iter - 1].style.visibility = 'hidden';};
-                if (((itemIdOrder-iter) != itemIdOrder) && (22 > (itemIdOrder-iter)) && ((itemIdOrder-iter) > 0)) {containers[itemIdOrder-iter - 1].style.visibility = 'hidden';};
+                if (((((itemIdOrder - 1) % 7) + iter) < 7) && ((itemIdOrder+iter) != itemIdOrder) && (22 > (itemIdOrder+iter)) && ((itemIdOrder+iter) > 0)) {containers[itemIdOrder+iter - 1].style.visibility = 'hidden';};
+                if (((((itemIdOrder - 1) % 7) - iter) >= 0) && ((itemIdOrder-iter) != itemIdOrder) && (22 > (itemIdOrder-iter)) && ((itemIdOrder-iter) > 0)) {containers[itemIdOrder-iter - 1].style.visibility = 'hidden';};
 
-                if ((22 > (itemIdOrder+7+iter)) && ((itemIdOrder+7+iter) > 0)) {containers[itemIdOrder + 7 + iter - 1].style.visibility = 'hidden';};
-                if ((22 > (itemIdOrder+7-iter)) && ((itemIdOrder+7-iter) > 0)) {containers[itemIdOrder + 7 - iter - 1].style.visibility = 'hidden';};
+                if (((((itemIdOrder - 1) % 7) + iter) < 7) && (22 > (itemIdOrder+7+iter)) && ((itemIdOrder+7+iter) > 0)) {containers[itemIdOrder + 7 + iter - 1].style.visibility = 'hidden';};
+                if (((((itemIdOrder - 1) % 7) - iter) >= 0) && (22 > (itemIdOrder+7-iter)) && ((itemIdOrder+7-iter) > 0)) {containers[itemIdOrder + 7 - iter - 1].style.visibility = 'hidden';};
 
-                if ((22 > (itemIdOrder-7+iter)) && ((itemIdOrder-7+iter) > 0)) {containers[itemIdOrder - 7 + iter - 1].style.visibility = 'hidden';};
-                if ((22 > (itemIdOrder-7-iter)) && ((itemIdOrder-7-iter) > 0)) {containers[itemIdOrder - 7 - iter - 1].style.visibility = 'hidden';};
+                if (((((itemIdOrder - 1) % 7) + iter) < 7) && (22 > (itemIdOrder-7+iter)) && ((itemIdOrder-7+iter) > 0)) {containers[itemIdOrder - 7 + iter - 1].style.visibility = 'hidden';};
+                if (((((itemIdOrder - 1) % 7) - iter) >= 0) && (22 > (itemIdOrder-7-iter)) && ((itemIdOrder-7-iter) > 0)) {containers[itemIdOrder - 7 - iter - 1].style.visibility = 'hidden';};
 
-                if ((22 > (itemIdOrder+14+iter)) && ((itemIdOrder+14+iter) > 0)) {containers[itemIdOrder + 14 + iter - 1].style.visibility = 'hidden';};
-                if ((22 > (itemIdOrder+14-iter)) && ((itemIdOrder+14-iter) > 0)) {containers[itemIdOrder + 14 - iter - 1].style.visibility = 'hidden';};
+                if (((((itemIdOrder - 1) % 7) + iter) < 7) && (22 > (itemIdOrder+14+iter)) && ((itemIdOrder+14+iter) > 0)) {containers[itemIdOrder + 14 + iter - 1].style.visibility = 'hidden';};
+                if (((((itemIdOrder - 1) % 7) - iter) >= 0) && (22 > (itemIdOrder+14-iter)) && ((itemIdOrder+14-iter) > 0)) {containers[itemIdOrder + 14 - iter - 1].style.visibility = 'hidden';};
 
-                if ((22 > (itemIdOrder-14+iter)) && ((itemIdOrder-14+iter) > 0)) {containers[itemIdOrder - 14 + iter - 1].style.visibility = 'hidden';};
-                if ((22 > (itemIdOrder-14-iter)) && ((itemIdOrder-14-iter) > 0)) {containers[itemIdOrder - 14 - iter - 1].style.visibility = 'hidden';};
+                if (((((itemIdOrder - 1) % 7) + iter) < 7) && (22 > (itemIdOrder-14+iter)) && ((itemIdOrder-14+iter) > 0)) {containers[itemIdOrder - 14 + iter - 1].style.visibility = 'hidden';};
+                if (((((itemIdOrder - 1) % 7) - iter) >= 0) && (22 > (itemIdOrder-14-iter)) && ((itemIdOrder-14-iter) > 0)) {containers[itemIdOrder - 14 - iter - 1].style.visibility = 'hidden';};
 
                 setTimeout(() => {
                     hideContainers(itemId,itemIdOrder,iter + 1);
                 }, 500);
                 }
             };
+
+        function swapCard(button) {
+            const container = button.parentNode;
+            container.style.zIndex = 25;
+            const itemId = button.id;
+            button.style.background = `url('img/${itemId}.jpg') no-repeat`
+        }
+
+
         function showChoise(button) {
             const container = button.parentNode;
                         const content = document.getElementById('content');
                         const buttonRect = button.getBoundingClientRect();
-                        container.style.zIndex = 25;
+
                         const itemId = button.id;
                         //const itemId = button.id;
-                        button.style.background = `url('img/${itemId}.jpg') no-repeat`;
+
                         const buttons = document.querySelectorAll('.button');
                         buttons.forEach(button => {
                             button.setAttribute("disabled", "false");
