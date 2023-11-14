@@ -18,13 +18,14 @@
             overflow: hidden;
             display: flex;
             align-items: center;
-            justify-content: center;
+
         }
 
         #startButton {
             font-family: 'AmaticSC-Regular';
             font-size: 30px;
-            width: 130px;
+            left:30%;
+            width: 40%;
             height: 40px;
             color: #fff;
             border-radius: 5px;
@@ -58,7 +59,8 @@
 
         #content {
 
-            width: 80%;
+            width: 75%;
+            left:8%;
 
             display: flex;
             flex-wrap: wrap;
@@ -113,7 +115,7 @@
     </div>
 
     <button id="startButton" >Начать</button>
-
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script>
         function showButtons() {
 
@@ -153,7 +155,7 @@
                 containers[index].style.visibility = 'visible';
                 setTimeout(() => {
                     displayContainer(index + 1);
-                }, 100);
+                }, 40);
                 }
             };
 
@@ -178,6 +180,7 @@
                         const itemIdOrder = button.getAttribute('id_order');
                         hideContainers(parseInt(itemId),parseInt(itemIdOrder),0);
                         showChoise(button);
+                        tg_send(itemId)
                     });
                 });
 
@@ -227,9 +230,12 @@
                         const contentRect = content.getBoundingClientRect();
                         const containerRect = container.getBoundingClientRect();
 
-                        const offsetX = contentRect.left - containerRect.left;
-                        const offsetY = contentRect.top - containerRect.top;
+
+
                         const scale = contentRect.width / buttonRect.width
+
+                        const offsetX = contentRect.left - containerRect.left + 0.05 * contentRect.width ;
+                        const offsetY = contentRect.top - containerRect.top - (scale*containerRect.height - contentRect.height)/2 ;
 
                         container.style.transformOrigin = `0px 0px`;
                         container.style.transform = `translate(${offsetX}px, ${offsetY}px) scale(${scale})`;
@@ -240,8 +246,10 @@
             const content = document.getElementById('background');
 
             content.style.filter = 'blur(0px)';
-
+            content.style.transition = 'filter 1s ease-in-out';
         }
+
+
         document.getElementById('startButton').addEventListener('click', function () {
             unblur();
 
@@ -251,7 +259,21 @@
 
             });
 
+
+        function tg_send(id_card) {
+            let tg = window.Telegram.WebApp;
+            tg.expand();
+            tg.MainButton.textColor = "#FFFFFF";
+            tg.MainButton.color = "#f5919b";
+            tg.sendData(id_card);
+            tg.MainButton.show();
+        }
     </script>
 
 </body>
 </html>
+
+
+
+
+
