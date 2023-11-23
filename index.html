@@ -384,14 +384,19 @@
 
             });
 
-        document.getElementById('button_tg').addEventListener('click', function () {
+        const button_tg = document.getElementById('button_tg')
+        button_tg.addEventListener('click', function () {
 
-            const card_id = button.getAttribute('card_id');
+            const card_id = button_tg.getAttribute('card_id');
             setTimeout(function () {
                 tg_send(card_id);
             }, 0);
 
             });
+
+
+
+
 
 
 
