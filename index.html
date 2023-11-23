@@ -47,6 +47,63 @@
             border: none;
         }
 
+        #button_tg {
+            font-family: 'AmaticSC-Regular';
+            font-size: 25px;
+            left:12.5%;
+            bottom: 14%;
+            width: 75%;
+            height: 40px;
+            color: #fff;
+            border-radius: 5px;
+            padding: 10px 25px;
+            font-weight: 500;
+            background: transparent;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: fixed;
+            display: inline-block;
+            box-shadow:inset 2px 2px 2px 0px rgba(255,255,255,.5),
+            7px 7px 20px 0px rgba(0,0,0,.1),
+            4px 4px 5px 0px rgba(0,0,0,.1);
+            outline: none;
+            background-color: #f0ecfc;
+            background-image: linear-gradient(315deg, #f0ecfc 0%, #c797eb 74%);
+            line-height: 42px;
+            padding: 0;
+            border: none;
+        }
+
+        #button_restart {
+            font-family: 'AmaticSC-Regular';
+            font-size: 25px;
+            left:12.5%;
+            bottom: 7%;
+            width: 75%;
+
+            height: 40px;
+            color: #fff;
+            border-radius: 5px;
+            padding: 10px 25px;
+            font-weight: 500;
+            background: transparent;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: fixed;
+            display: inline-block;
+            box-shadow:inset 2px 2px 2px 0px rgba(255,255,255,.5),
+            7px 7px 20px 0px rgba(0,0,0,.1),
+            4px 4px 5px 0px rgba(0,0,0,.1);
+            outline: none;
+            background-color: #f0ecfc;
+            background-image: linear-gradient(315deg, #f0ecfc 0%, #c797eb 74%);
+            line-height: 42px;
+            padding: 0;
+            border: none;
+        }
+
         #background {
             position: fixed;
             width: 100vw;
@@ -117,6 +174,9 @@
     </div>
 
     <button id="startButton" >Начать</button>
+
+    <button id="button_tg" style="display: none;">Получить расшифровку в telegram</button>
+    <button id="button_restart" style="display: none;">Выбрать карту еще раз</button>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script>
         function showButtons() {
@@ -132,7 +192,10 @@
 
             const startButton = document.getElementById('startButton');
             startButton.style.display = 'none';
-
+            const button_tg = document.getElementById('button_tg');
+            button_tg.style.display = 'none';
+            const button_restart = document.getElementById('button_restart');
+            button_restart.style.display = 'none';
             const content = document.getElementById('content');
             content.style.display = 'flex';
 
@@ -193,8 +256,13 @@
                             showChoise(button);
                         }, 2000);
                         setTimeout(() => {
-                            tg_send(itemId)
-                        }, 15000);
+                            showButtonsMenu(button);
+                        }, 7000);
+
+
+                        //setTimeout(() => {
+                        //    tg_send(itemId)
+                        //}, 15000);
                     });
                 });
 
@@ -236,33 +304,55 @@
 
         function showChoise(button) {
             const container = button.parentNode;
-                        const content = document.getElementById('content');
-                        const buttonRect = button.getBoundingClientRect();
+            const content = document.getElementById('content');
+            const buttonRect = button.getBoundingClientRect();
 
-                        const itemId = button.id;
-                        //const itemId = button.id;
+            const itemId = button.id;
+            //const itemId = button.id;
 
-                        const buttons = document.querySelectorAll('.button');
-                        buttons.forEach(button => {
-                            button.setAttribute("disabled", "false");
-                        });
+            const buttons = document.querySelectorAll('.button');
+            buttons.forEach(button => {
+                button.setAttribute("disabled", "false");
+            });
 
-                        container.classList.add('clicked');
+            container.classList.add('clicked');
 
-                        //const container = button.closest('.button-container');
-                        const contentRect = content.getBoundingClientRect();
-                        const containerRect = container.getBoundingClientRect();
+            //const container = button.closest('.button-container');
+            const contentRect = content.getBoundingClientRect();
+            const containerRect = container.getBoundingClientRect();
 
 
 
-                        const scale = contentRect.width / buttonRect.width
+            const scale = contentRect.width / buttonRect.width
 
-                        const offsetX = contentRect.left - containerRect.left + 0.05 * contentRect.width ;
-                        const offsetY = contentRect.top - containerRect.top - (scale*containerRect.height - contentRect.height)/2 ;
+            const offsetX = contentRect.left - containerRect.left + 0.05 * contentRect.width ;
+            const offsetY = contentRect.top - containerRect.top - (scale*containerRect.height - contentRect.height)/2 ;
 
-                        container.style.transformOrigin = `0px 0px`;
-                        container.style.transform = `translate(${offsetX}px, ${offsetY}px) scale(${scale})`;
-                        container.style.transition = 'transform 4s ease-in-out';
+            container.style.transformOrigin = `0px 0px`;
+            container.style.transform = `translate(${offsetX}px, ${offsetY}px) scale(${scale})`;
+            container.style.transition = 'transform 4s ease-in-out';
+
+        }
+
+        function showButtonsMenu(button) {
+            const button_tg = document.getElementById('button_tg');
+            const button_restart = document.getElementById('button_restart');
+            button_tg.style.display = 'flex';
+            button_restart.style.display = 'flex';
+            const itemId = button.id;
+            //const itemId = button.id;
+
+            button_tg.setAttribute("card_id", `${itemId}`);
+
+
+        }
+
+        function removeButtons() {
+            const containers = content.querySelectorAll('.container');
+            Array.from(containers).forEach(function(element) {
+                element.remove();
+            });
+
         }
 
         function unblur() {
@@ -281,14 +371,36 @@
             }, 500);
 
             });
+        document.getElementById('button_restart').addEventListener('click', function () {
 
 
-        function tg_send(id_card) {
+            setTimeout(function () {
+                removeButtons();
+            }, 0);
+
+            setTimeout(function () {
+                showButtons();
+            }, 0);
+
+            });
+
+        document.getElementById('button_tg').addEventListener('click', function () {
+
+            const card_id = button.getAttribute('card_id');
+            setTimeout(function () {
+                tg_send(card_id);
+            }, 0);
+
+            });
+
+
+
+        function tg_send(card_id) {
             let tg = window.Telegram.WebApp;
             tg.expand();
             tg.MainButton.textColor = "#FFFFFF";
             tg.MainButton.color = "#f5919b";
-            tg.sendData(id_card);
+            tg.sendData(card_id);
             tg.MainButton.show();
         }
     </script>
