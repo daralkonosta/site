@@ -51,7 +51,7 @@
             font-family: 'AmaticSC-Regular';
             font-size: 25px;
             left:12.5%;
-            bottom: 14%;
+
             width: 75%;
             height: 40px;
             color: #fff;
@@ -79,7 +79,7 @@
             font-family: 'AmaticSC-Regular';
             font-size: 25px;
             left:12.5%;
-            bottom: 7%;
+
             width: 75%;
 
             height: 40px;
@@ -331,6 +331,23 @@
             container.style.transformOrigin = `0px 0px`;
             container.style.transform = `translate(${offsetX}px, ${offsetY}px) scale(${scale})`;
             container.style.transition = 'transform 4s ease-in-out';
+
+            const button_tg = document.getElementById('button_tg');
+            const button_restart = document.getElementById('button_restart');
+            const background = document.getElementById('background');
+
+            const button_tgRect = button_tg.getBoundingClientRect();
+            const button_restartRect = button_restart.getBoundingClientRect();
+            const backgroundRect = background.getBoundingClientRect();
+
+            const bottom_button_tg = ((backgroundRect.height - containerRect.height*scale)/2 - 40*2)/5 + 40 * 1.1
+            const bottom_button_restart = ((backgroundRect.height - containerRect.height*scale)/2 - 40*2)/5
+            console.log(button_tgRect.height);
+            console.log(bottom_button_tg);
+            console.log(bottom_button_restart);
+
+            button_tg.style.bottom = `${bottom_button_tg}px`;
+            button_restart.style.bottom = `${bottom_button_restart}px`;
 
         }
 
